@@ -1,6 +1,6 @@
 # Teen Mental Health Analysis
 
-A clean, portfolio-ready data analysis project exploring behavioral factors associated with teen depression using Python for analysis and a Power BI dashboard specification for presentation.
+Data analysis project exploring behavioral factors associated with teen depression using Python for analysis.
 
 ## Project objective
 
@@ -74,39 +74,6 @@ A class-weighted logistic regression was used as an interpretable baseline.
 
 Because the target is highly imbalanced and structurally generated, these metrics should be interpreted as a property of this dataset rather than a claim of real-world predictive performance.
 
-## Power BI dashboard
-
-A `.pbix` file cannot be generated in this environment, but the repository includes everything needed to build it quickly in Power BI Desktop:
-
-- `powerbi/POWERBI_BUILD_GUIDE.md`
-- `powerbi/dax_measures.txt`
-- `powerbi/teen_mental_health_theme.json`
-- `data/processed/teen_mental_health_processed.csv`
-
-Suggested dashboard pages:
-
-1. **Overview**: KPIs and headline risk rate
-2. **Behavioral patterns**: sleep and social media breakdowns
-3. **Emotional risk**: stress/anxiety matrix and profile segments
-4. **Model view**: interpretable drivers and key coefficients
-
-Dashboard layout preview:
-
-![Dashboard mockup](reports/dashboard_screenshots/dashboard_mockup.png)
-
-## How to run
-
-```bash
-pip install -r requirements.txt
-jupyter notebook notebooks/01_teen_mental_health_analysis.ipynb
-```
-
-Or run the scripts directly:
-
-```bash
-python src/data_prep.py
-python src/modeling.py
-```
 
 ## Limitations
 
@@ -114,6 +81,3 @@ python src/modeling.py
 - The target is very imbalanced.
 - Findings should be presented as a dataset case study, not as clinical evidence.
 
-## License
-
-MIT
