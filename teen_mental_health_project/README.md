@@ -1,83 +1,63 @@
-# Teen Mental Health Analysis
+# Teen mental health analysis
 
-Data analysis project exploring behavioral factors associated with teen depression using Python for analysis.
+An exploratory dataset case study using Python to examine sleep, social-media use, stress, anxiety and a binary depression label. Its purpose is to practise preparing data, interpreting associations and evaluating a model with an imbalanced target.
 
-## Project objective
+## Included evidence
 
-The goal of this project is to identify how sleep, social media usage, stress, and anxiety relate to the likelihood of depression in a teen mental health dataset, then translate those findings into an executive-friendly dashboard design.
+- [Exploratory notebook](notebooks/01_teen_mental_health_analysis.ipynb)
+- [Data preparation](src/data_prep.py), [modelling](src/modeling.py) and [visualisation](src/visualize.py)
+- Raw and processed CSV files under `data/`
+- Existing charts under [reports/figures](reports/figures)
 
-## Dataset
+No Power BI source dashboard, build guide, DAX measures or theme file is included. The processed data is suitable for a separate dashboard-building exercise.
 
-- Source file: `Teen_Mental_Health_Dataset.csv`
-- Rows: 1,200
-- Columns: 13
-- Target variable: `depression_label`
+## Findings
 
-## What this project includes
+The supplied raw CSV has 1,200 records and 13 columns. Its positive-label share is approximately 2.6%. The original analysis reports higher positive-label shares among records with less sleep or heavier social-media use. These are associations in the supplied dataset, not estimates for the wider teenage population.
 
-- Exploratory data analysis notebook
-- Reproducible Python scripts for data prep and modeling
-- Exported PNG charts for GitHub-ready storytelling
-- Processed dataset for Power BI import
-- Power BI build guide, DAX measures, and theme file
+![Sleep and target label](reports/figures/sleep_vs_depression.png)
+![Social media and target label](reports/figures/social_media_vs_depression.png)
+![Stress and anxiety](reports/figures/stress_anxiety_heatmap.png)
 
-## Key findings
+## Modelling
 
-- The depression-positive share is **2.6%**, so the target is highly imbalanced.
-- Teens sleeping under 6 hours have a depression rate of **6.5%**.
-- Teens using social media for 5 or more hours per day have a depression rate of **5.8%**.
-- Stress and anxiety show the strongest association with higher-risk outcomes.
-- The labels in this dataset appear to be highly structured. In fact, a simple rule using sleep, social media, stress, and anxiety reproduces the target perfectly in this dataset. That makes this project useful for demonstrating analysis workflow and dashboard design, but any real-world interpretation should be cautious.
+The existing pipeline uses median imputation and scaling for numeric columns, most-frequent imputation and one-hot encoding for categorical columns, and class-weighted logistic regression. A stratified 75/25 train/test split uses random seed 42.
 
-## Repository structure
+The October 2026 reproduction check returned **ROC AUC 0.985** and **average precision 0.702**. Strongly structured labels and the small positive class limit interpretation. These are results from one held-out split, not cross-validated or externally validated clinical performance.
 
-```text
-teen_mental_health_project_option_a_full/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── notebooks/
-├── powerbi/
-├── reports/
-│   ├── dashboard_screenshots/
-│   └── figures/
-├── src/
-├── .gitignore
-├── LICENSE
-├── README.md
-└── requirements.txt
-```
-
-## Visual summary
-
-### 1) Target distribution
-![Target distribution](reports/figures/target_distribution.png)
-
-### 2) Sleep duration and depression
-![Sleep vs depression](reports/figures/sleep_vs_depression.png)
-
-### 3) Social media usage and depression
-![Social media vs depression](reports/figures/social_media_vs_depression.png)
-
-### 4) Combined stress and anxiety pattern
-![Stress anxiety heatmap](reports/figures/stress_anxiety_heatmap.png)
-
-### 5) Interpretable model coefficients
 ![Model coefficients](reports/figures/model_coefficients.png)
 
-## Modeling summary
+## Run locally
 
-A class-weighted logistic regression was used as an interpretable baseline.
+From the repository root:
 
-- ROC AUC: **0.985**
-- Average precision: **0.702**
+```bash
+cd teen_mental_health_project
+python -m venv .venv
+```
 
-Because the target is highly imbalanced and structurally generated, these metrics should be interpreted as a property of this dataset rather than a claim of real-world predictive performance.
+Activate `.venv\Scripts\Activate.ps1` in PowerShell or `source .venv/bin/activate` on macOS/Linux, then:
 
+```bash
+python -m pip install -r requirements.txt
+python src/modeling.py
+```
 
-## Limitations
+The modelling script prints metrics and does not save a trained model. To regenerate the processed CSV and target-distribution chart:
 
-- The dataset is synthetic or at least strongly rule-driven.
-- The target is very imbalanced.
-- Findings should be presented as a dataset case study, not as clinical evidence.
+```bash
+python src/data_prep.py
+python src/visualize.py
+```
 
+These two commands overwrite their existing output files. Preserve copies before comparing with historical outputs. `visualize.py` regenerates only `target_distribution.png`; it does not recreate every figure. The notebook contains additional exploratory work and was not executed end to end in the review.
+
+No credentials or external API calls are needed. The scripts locate their input files relative to their own project directory. Python 3.12 was used for the reproduction check; the requirements are not version-pinned.
+
+## Limitations and responsible interpretation
+
+The original source, collection method and redistribution terms of the dataset need confirmation. The existing analysis describes the target as synthetic or strongly rule-driven; provenance has not been independently established. This is not a diagnostic tool, and it does not establish that sleep or social-media changes cause clinical outcomes.
+
+The data-preparation script's `risk_profile` values are descriptive rules within this exercise, not validated risk scores. No new personal data or source records were added. The existing licence is unchanged and does not establish rights to third-party data.
+
+Future work: confirm provenance, document label construction and compare model stability across several splits. No new model claims are made until those checks are completed.
